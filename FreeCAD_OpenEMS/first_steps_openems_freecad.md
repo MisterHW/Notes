@@ -87,8 +87,3 @@ To execute one of the examples,
 * press ``Save File and Run/Continue``. 
 * Switch to ``Command Window`` if necessary.
 
-
-## Setting Up A First Problem
- 
- 
-
