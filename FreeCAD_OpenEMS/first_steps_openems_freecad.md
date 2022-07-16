@@ -1,13 +1,15 @@
 # From FreeCAD to OpenEMS
 
-3D electromagnetic FDTD simulations are a tool to analyze, among other things (S-parameters and radiation patterns of antenna structures, TDR simulation), circuits with distributed elements and custom air-core magnetics. 
-
-The focus of thie article is to document a foray into this territory under Windows. We need
+Required:
 
 * FreeCAD for mechanical CAD
 * FreeCAD-OpenEMS-Export for problem configuration
 * Octave for script execution
 * OpenEMS itself with its FDTD solvers and visualization
+
+Additionally,
+
+* ParaView to inspect results
 
 
 
@@ -87,3 +89,10 @@ To execute one of the examples,
 * press ``Save File and Run/Continue``. 
 * Switch to ``Command Window`` if necessary.
 
+### ParaView
+
+The latest ParaView versions (and older ones required for Windows 7 use)  can be downloaded at https://www.paraview.org/download/ .
+
+For Windows 7, use the last build with Python 3.8: 
+
+[ParaView-5.9.1-MPI-Windows-Python3.8-msvc2017-64bit.exe](https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.9&type=binary&os=Windows&downloadFile=ParaView-5.9.1-MPI-Windows-Python3.8-msvc2017-64bit.exe)
