@@ -1,4 +1,4 @@
-# Microstripline With A Stub
+# Microstrip Transmission Line With A Stub
 
 If you're interested in antennas, high-frequency simulation of circuit structures, custom components (e.g. magnetics) and a mix of CAD models and lumped components working as a circuit, FDTD may be for you. Below is a first example that should help to get a foot on the ground with OpenEMS and the other tools involved.
 
@@ -7,6 +7,8 @@ If you're interested in antennas, high-frequency simulation of circuit structure
 <td style="vertical-align:center">&rarr;</td>
 <td style="text-align:left"><img src="img/Cw06vA0A1w.gif" /></td>
 </tr></table>
+
+Caveat: The model is not dimensionally accurate and will probably have a mismatched impedance. Dimensions are chosen to avoid having to obsess over mesh generation details and to improve the chances of first-pass success. To make up for that, information on how to do it right is also given, and tutorials and official OpenEMS documentation is referenced for further reading. The author welcomes corrections and suggestions to promote best practices.
 
 # Problem Setup
 
