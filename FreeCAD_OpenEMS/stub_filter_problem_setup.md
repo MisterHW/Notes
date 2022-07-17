@@ -8,7 +8,7 @@ If you're interested in antennas, high-frequency simulation of circuit structure
 <td style="text-align:left"><img src="img/Cw06vA0A1w.gif" /></td>
 </tr></table>
 
-Caveat: The model is not dimensionally accurate and will probably have a mismatched impedance. Dimensions are chosen to avoid having to obsess over mesh generation details and to improve the chances of first-pass success. To make up for that, information on how to do it right is also given, and tutorials and official OpenEMS documentation is referenced for further reading. The author welcomes corrections and suggestions to promote best practices.
+Caveat: The model is not dimensionally accurate and will probably have a mismatched impedance. Dimensions are chosen to avoid having to obsess over mesh generation details and to improve the chances of first-pass success. To make up for that, information on how to do it right is also given, and tutorials and official OpenEMS documentation are referenced for further reading. The author welcomes corrections and suggestions to promote best practices.
 
 # Problem Setup
 
@@ -141,9 +141,9 @@ Also refer to this animation for the property values under ``Grid Settings`` and
 
 ### Ports
 
-See https://openems.de/index.php/Ports.html , where it states:
+See https://openems.de/index.php/Ports.html , where it is stated:
 
-	Ports are macro function that combine e.g. current and voltage probes, 
+	Ports are macro functions that combine e.g. current and voltage probes, 
 	field excitations and other necessary properties and primitives.
 	
 The concept of a port is thus not simply a contact point akin to an SMA or u.fl connector point. One could perhaps consider all cells *not connected* to a port region to be *internal* or *hidden* cells, while others associated with a port definition are either connected to external sources, loads or field and potential probes. 
