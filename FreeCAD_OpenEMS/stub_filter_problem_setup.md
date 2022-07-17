@@ -280,7 +280,7 @@ disp("mesh min spacing z : "), min(abs(diff(mesh.z)))
 ```
 
 This appears to be unreliable however. The output in a currently problematic case only reflects the intended spacings:
-```Matlab
+```
 mesh min spacing x :
 ans = 1.0000
 mesh min spacing y :
