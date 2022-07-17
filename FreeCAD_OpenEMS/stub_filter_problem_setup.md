@@ -2,6 +2,12 @@
 
 If you're interested in antennas, high-frequency simulation of circuit structures, custom components (e.g. magnetics) and a mix of CAD models and lumped components working as a circuit, FDTD may be for you. Below is a first example that should help to get a foot on the ground with OpenEMS and the other tools involved.
 
+<table border="0"><tr>
+<td style="text-align:right"><img src="img/002_setup_small.png" /></td>
+<td style="vertical-align:center">&rarr;</td>
+<td style="text-align:left"><img src="img/Cw06vA0A1w.gif" /></td>
+</tr></table>
+
 # Problem Setup
 
 Setting up the first problem may feel like a daunting task, which is unfortunately more a function of the unrealized user-friendliness of the tools involved than one of the physical problem itself. With the required applications set up and working, the actual workflow is composed of the following steps:
@@ -113,7 +119,7 @@ Luckily, specifying material properties is not a lenghty process.
 
 FreeCAD-OpenEMS Export appeared to insist on creating a ``PEC`` metal:
 
-```
+```Matlab
 CSX = AddMetal( CSX, 'PEC' );
 ``` 
 
@@ -131,7 +137,58 @@ Also refer to this animation for the property values under ``Grid Settings`` and
 
 ## 5. Completing The Problem Definition
 
-(incomplete)
+### Ports
+
+See https://openems.de/index.php/Ports.html , where it states:
+
+	Ports are macro function that combine e.g. current and voltage probes, 
+	field excitations and other necessary properties and primitives.
+	
+The concept of a port is thus not simply a contact point akin to an SMA or u.fl connector point. One could perhaps consider all cells *not connected* to a port region to be *internal* or *hidden* cells, while others associated with a port definition are either connected to external sources, loads or field and potential probes. 
+
+In circuit terms, we intend to consider our design connected to a source with its input, and e.g. an oscilloscope at the output:
+
+	Concentrated ports such as the lumped or curve port are supposed to be 
+	very small and compact ports. Their size should be much smaller than the wavelength.
+
+* ``Port_In`` : lumped, 50 Ohm active port in +z direction
+* ``Port_Out`` : lumped, 50 Ohm non-active port in +z direction (termination)
+
+![](img/002_port_in.PNG)
+
+To observe a particular region of the simulation volume, an E field dump is configured. One could observe the entire volume for all times, but often only particular section planes are of interest. 
+
+* ``electric field`` : Et dump region observing the field distribution, a plane with +z normal direction 
+
+![](img/002_port_E_dump.PNG)
+
+Volumetric information on the other hand is of interest e.g. when simulating cavities and waveguides, as well as near fields of radiating structures.
+
+### Excitation
+
+See http://openems.de/index.php/Excitation . Various excitation types are possible, including an analytical function when using ``FDTD = SetCustomExcite(FDTD,f0,funcStr)``. Here, we choose Gaussian excitation over ``2.5 +/- 2 GHz`` .
+
+![](img/002_excitation.PNG)
+
+### Solver Options
+
+* maximum timestep :  100000 (an abort criterion which may not be reached as during Gaussian excitation, the simulation should hit a minimum energy dispersion (-30 dB) threshold first.
+* min decrement : 0.001 (?)
+
+https://openems.de/index.php/Frequently_Asked_Questions.html : 
+
+    My timestep seems to be very small and the simulation takes a long time. Why?
+    
+	A (very) small timestep usually means that the mesh contains one or more cells 
+	that are very small. The timestep is defined by the smallest cell. If you really 
+	need small cells (e.g. to resolve some important feature of your structure) 
+	you will have to live with long execution times or perhaps FDTD is not the 
+	right method for your problem. In most cases you should check if you can
+	avoid small cells.
+
+In the FreeCAD-OpenEMS Exporter dialog, the Simulation Params tab also contains the boundary condition settings which we will look at next.
+
+![](img/002_sim_params.PNG)
 
 ### Boundary Conditions
 
@@ -202,7 +259,7 @@ The mesh used by the finite-difference time-domain (FDTD) method is a strictly r
 
 The mesh resulting from the problem setup and chosen mesh regions / types can be inspected upon execution as AppCSXCAD starts in read-only mode when running the script in Octave. One can add 
 
-```
+```Matlab
 mesh.x
 mesh.y
 mesh.z
@@ -214,14 +271,14 @@ As per http://openems.de/forum/viewtopic.php?t=1103 , one should check the minim
 
 As a presumed improvement, one could consider looking for the minimum abs(), inserted before DefineRectGrid():
 
-```
+```Matlab
 disp("mesh min spacing x : "), min(abs(diff(mesh.x)))
 disp("mesh min spacing y : "), min(abs(diff(mesh.y)))
 disp("mesh min spacing z : "), min(abs(diff(mesh.z)))
 ```
 
 This appears to be unreliable however. The output in a currently problematic case only reflects the intended spacings:
-```
+```Matlab
 mesh min spacing x :
 ans = 1.0000
 mesh min spacing y :
@@ -232,13 +289,13 @@ ans = 0.2500
 
 Since an order is not guaranteed, the mesh entries need to be sorted first. The following lines can be inserted manually into the script after generation, replacing the 
 
-```
+```Matlab
 CSX = DefineRectGrid(...);
 ```
 
 line with:
 
-```
+```Matlab
 mesh.x = sort(mesh.x);
 mesh.y = sort(mesh.y);
 mesh.z = sort(mesh.z);
@@ -262,7 +319,7 @@ CSX = DefineRectGrid(CSX, 0.001, mesh);
 The code above requires  [uniquetol.m](example_stub_filter/uniquetol.m) which was probably added to Octave 7.1, but not Octave 6.4 [(bug #59850)](https://savannah.gnu.org/bugs/index.php?59850) , so it needs to be added to the script folder.
  
  Now we get:
-``` 
+```Matlab
 mesh min spacing x : 0.5
 mesh min spacing y : 0.5
 mesh min spacing z : 3.3827e-17
@@ -275,6 +332,78 @@ Minimum mesh spacing violated, removing duplicate entries.
  
 # Solution and Visualization 
 
-(incomplete)
+* Now is a good time to click "Save Current Settings", which produces an .ini file in the project folder.
+* Note under ``Postprocessing`` there is a ``Write ABORT simulation File`` button, which creates a file named "ABORT" in the ``tmp/`` subdirectory of the project folder to cause OpenEMS to exit when it is being run from Octave, which will come in handy later.
+* Also note the ``Generate just simulation preview`` option that allows to run the Octave script just with AppCSXCAD to preview the model and meshing. 
+ 
+ ![](img/002_postprocessing.PNG)
  
  
+ When ready, 
+  * click ``Generate OpenEMS Script`` in the bottom right corner of the Exporter dialog.
+ ![](img/exporter_dialog_buttons.PNG) 
+ * Open the .m file with the project name in the project folder with Octave and run it.
+ * Preview the simulation model and mesh.
+ * Un-tick  ``Generate just simulation preview`` and re-generate the script.
+ * To the .m file, add the mesh validation code from above as needed (it will be removed from the script each time it is being generated. Use the ``ABORT`` file during debugging if there are problems during OpenEMS execution.
+ 
+ Here's what the output in the Octave ``Command Window`` could look like:
+ 
+```
+remove entire contents of tmp? (yes or no) yes
+mesh min spacing x : 1
+mesh min spacing y : 1
+mesh min spacing z : 3.6689e-16
+Minimum mesh spacing violated, removing duplicate entries.
+invoking AppCSXCAD, exit to continue script...
+QCSXCAD - disabling editing
+QCSXCAD - disabling editing
+args = "002.xml"
+ ----------------------------------------------------------------------
+ | openEMS 64bit -- version v0.0.35-74-g0e54fbf
+ | (C) 2010-2018 Thorsten Liebig <thorsten.liebig@gmx.de>  GPL license
+ ----------------------------------------------------------------------
+        Used external libraries:
+                CSXCAD -- Version: v0.6.2-103-g3c4fb66
+                hdf5   -- Version: 1.8.12
+                          compiled against: HDF5 library version: 1.8.12
+                tinyxml -- compiled against: 2.6.2
+                fparser
+                boost  -- compiled against: 1_60
+                vtk -- Version: 8.2.0
+                       compiled against: 8.2.0
+
+Create FDTD operator (compressed SSE + multi-threading)
+FDTD simulation size: 70x70x29 --> 142100 FDTD cells
+FDTD timestep is: 7.86218e-13 s; Nyquist rate: 141 timesteps @4.51033e+09 Hz
+Excitation signal length is: 1822 timesteps (1.43249e-09s)
+Max. number of timesteps: 100000 ( --> 54.8847 * Excitation signal length)
+Create FDTD engine (compressed SSE + multi-threading)
+Running FDTD engine... this may take a while... grab a cup of coffee?!?
+[@        4s] Timestep:          455 || Speed:   15.9 MC/s (8.928e-03 s/TS) || Energy: ~4.73e-16 (- 0.00dB)
+[@        8s] Timestep:          910 || Speed:   15.4 MC/s (9.220e-03 s/TS) || Energy: ~1.03e-13 (- 0.00dB)
+[@       12s] Timestep:         1470 || Speed:   19.4 MC/s (7.327e-03 s/TS) || Energy: ~8.88e-14 (- 0.69dB)
+[@       16s] Timestep:         1890 || Speed:   14.9 MC/s (9.546e-03 s/TS) || Energy: ~4.38e-14 (- 3.77dB)
+[@       20s] Timestep:         2415 || Speed:   18.6 MC/s (7.633e-03 s/TS) || Energy: ~4.02e-15 (-14.13dB)
+[@       24s] Timestep:         2905 || Speed:   16.9 MC/s (8.425e-03 s/TS) || Energy: ~6.43e-16 (-22.10dB)
+[@       28s] Timestep:         3430 || Speed:   17.3 MC/s (8.191e-03 s/TS) || Energy: ~5.38e-17 (-32.87dB)
+Time for 3430 iterations with 142100.00 cells : 28.81 sec
+Speed: 16.92 MCells/s
+
+>>
+``` 
+
+When successfully completed, a set of files starting with ``tmp/electric field_0000000000.vtr`` will be written to the temporary folder, ready for inspection with ParaView.
+
+* Import multiple files by clicking he grouped .vtr files.
+* In Pipeline Browser, click the eye icon to enable visibility.
+* Select Represenation = Surface.
+* Select Coloring = E-Field.
+* Click Coloring button "Rescale to data range over all timesteps.
+
+![](img/002_paraview_steps.png)
+
+* select loop playback in the top toolbar.
+* Press play.
+
+For further help, please also check out the [OpenEMS Forum](https://openems.de/forum/).
