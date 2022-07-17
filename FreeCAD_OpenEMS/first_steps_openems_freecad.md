@@ -11,7 +11,11 @@ Additionally,
 
 * ParaView to inspect results
 
+## Free and Open Source
 
+Yes.
+
+![](img/tools.png)
 
 ## Setup
 
