@@ -320,11 +320,11 @@ CSX = DefineRectGrid(CSX, 0.001, mesh);
  
 The code above requires  [uniquetol.m](example_stub_filter/uniquetol.m) which was probably added to Octave 7.1, but not Octave 6.4 [(bug #59850)](https://savannah.gnu.org/bugs/index.php?59850) , so it needs to be added to the script folder.
  
- Now we get:
-```Matlab
-mesh min spacing x : 0.5
-mesh min spacing y : 0.5
-mesh min spacing z : 3.3827e-17
+ Now when running the script in Octave, we would get:
+```
+mesh min spacing x : 1
+mesh min spacing y : 1
+mesh min spacing z : 3.6689e-16
 Minimum mesh spacing violated, removing duplicate entries.
 ...
  ```
