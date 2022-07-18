@@ -55,7 +55,7 @@ For the purposes of this example it serves to keep things simple. Simulation geo
 
 Especially the last point, the design of a mesh informed by prior knowledge of results and typical manifestation of the underlying physics (here Maxwell's equations) can be perceived as a hurdle when getting started. So let us not assume prior knowledge of what an efficient FDTD mesh is, at least for now. Later, there will arise a natural need for objective quality and stability criteria, as simulations may simply fail or show physically implausible behavior (e.g. ringing at the edges of a step excitation after propagating through a microstrip transmission line, infinite or zero energy, resonances that do not correspond to physical lengths and circuit elements implemented in the model).
 
-For simplicity, open  `` 002.FCStd``  from the [example project folder](example_stub_filter/) to follow along.
+For simplicity, open  ``002.FCStd``  from the [example project folder](example_stub_filter/) to follow along.
 
 Below is a brief overview over the (unorganized) objects that make up a printed circuit board in FreeCAD, with 2 layers and 1.5 mm thick FR4. The tracks are made very thick to ensure at least 1-2 grid lines (actually grid planes)  lie inside the conductor:
 
@@ -63,11 +63,11 @@ Below is a brief overview over the (unorganized) objects that make up a printed 
 
 The geometry is made up of:
 
-*  50x3x0.5 mm copper trace and
-*  15x3x0.5 mm copper stub on top of a
-*  60x60x1.5 mm FR4 block (Substrate), below which another 
-*  60x60x0.5 mm copper block (GND) is placed.
-*  2x2x2.5 mm blocks placed across the top and bottom layers for ports pointing in z-direction (Term_IN, Term_OUT).
+*  50 x 3 x 0.5 mm copper trace and
+*  15 x 3 x 0.5 mm copper stub on top of a
+*  60 x 60 x 1.5 mm FR4 block (Substrate), below which another 
+*  60 x 60 x 0.5 mm copper block (GND) is placed.
+*  2 x 2 x 2.5 mm blocks placed across the top and bottom layers for ports pointing in z-direction (Term_IN, Term_OUT).
 
 The size of the simulation (or air) volume is small and based on some naive assumptions: the E field is mostly confined to the substrate and the edges of traces. The 3W rule from PCB design (minimum distance between PCB traces that are not intentionally coupled / show only a minor amount of interference) and the traces being over an uninterrupted groundplane are taken as an orientation. 
 
@@ -77,11 +77,11 @@ The validation of those assumptions through addition of another E field port pla
 
 Three helper volumes are added:
 
-* 70x70x20 mm simulation volume (Air_Volume),
-* 50x50x3 mm fine mesh region
-* 55x55x0.5 mm region in which the E field will be investigated.
+* 70 x 70 x 20 mm ``grid_coarse`` simulation volume (Air_Volume),
+* 50 x 50 x 3 mm ``grid_fine`` nested  (fine mesh region)
+* 55 x 55 x 0.5 mm region in which the E field will be investigated.
 
-In the Part workbench, select + CTRL-D or right-click item "Appearance.." easily allows to reduce the transparency. These blocks can be hidden (select + Space) to work on the geometry inside.
+In the Part workbench, select + CTRL-D or right-click item ``Appearance..`` easily allows to reduce the transparency. These blocks can be hidden (select + SPACE) to work on the geometry inside.
 
 **Note that currently the names should not be changed after this point to avoid errors and loss of assignments in  FreeCAD-OpenEMS Exporter.**
 
@@ -269,7 +269,7 @@ mesh.z
 lines to look at all the numerical values of grid ine positions. Some issues however also become evident rather quickly as the simulation may not run, or yield plausible results:
 
 ####  OpenEMS Problem "Energy: ~   nan (- 0.00dB)"
-As per http://openems.de/forum/viewtopic.php?t=1103 , one should check the minimum spacing between mesh grid lines. When using multiple overlapping grids that have the same priority level, one would also need to sort them first or otherwise the minimum could be "-65" mm" (in FreeCAD-to-OpenEMS there only seems to be the "top priority, remove overlapping lines" option which currently does not prevent the problem).
+As per http://openems.de/forum/viewtopic.php?t=1103 , one should check the minimum spacing between mesh grid lines. When using multiple overlapping grids that have the same priority level, one would also need to sort them first or otherwise the minimum could be "-65 mm" (in FreeCAD-to-OpenEMS there only seems to be the ``top priority, remove overlapping lines`` option which currently does not prevent the problem).
 
 As a presumed improvement, one could consider looking for the minimum abs(), inserted before DefineRectGrid():
 
@@ -334,7 +334,7 @@ Minimum mesh spacing violated, removing duplicate entries.
  
 # Solution and Visualization 
 
-* Now is a good time to click "Save Current Settings", which produces an .ini file in the project folder.
+* Now is a good time to click ``Save Current Settings``, which produces an .ini file in the project folder.
 * Note under ``Postprocessing`` there is a ``Write ABORT simulation File`` button, which creates a file named "ABORT" in the ``tmp/`` subdirectory of the project folder to cause OpenEMS to exit when it is being run from Octave, which will come in handy later.
 * Also note the ``Generate just simulation preview`` option that allows to run the Octave script just with AppCSXCAD to preview the model and meshing. 
  

@@ -2,7 +2,7 @@
 
 3D electromagnetic FDTD simulations are a tool to analyze, among other things (like S-parameters and radiation patterns of antenna structures, TDR simulation), circuits with distributed elements and custom air-core magnetics. 
 
-Never heard of OpenEMS? Check out [Torsten Liebig's FOSDEM talk](https://archive.fosdem.org/2019/schedule/event/openems/) for a gentle introduction (27 min video).
+Never heard of OpenEMS? Check out [Thorsten Liebig's FOSDEM talk](https://archive.fosdem.org/2019/schedule/event/openems/) for a gentle introduction (27 min video).
 
 The focus of this article is to document a foray into this territory under Windows.
 
