@@ -229,7 +229,7 @@ As shown above, two nested mesh regions are defined in this example:
 * ``grid_coarse``: 1 x 1 x 1 mm cell size
 * ``grid_fine``: 1 x 1 x 0.25 mm cell size
 
-From AppCSXCAD run later, the refinement in the z-direction is visible. In principle, cell dimensions should only vary by a factor of 2 from cell to cell, but we shall try 1 mm and 0.25 mm here for simplicity, making the refined mesh region thicker in hopes that the strongest field gradients are directly at the height of the top side metal layer, leaving a few cells thick layer between the metal and the transition in the grid spacing.
+From AppCSXCAD run later, the refinement in the z-direction is visible. In principle, **cell dimensions should only vary by a factor of 2 from cell to cell**, but we shall try 1 mm and 0.25 mm here for simplicity, making the refined mesh region thicker in hopes that the strongest field gradients are directly at the height of the top side metal layer, leaving a few cells thick layer between the metal and the transition in the grid spacing.
 
 ![](img/appcsxcad_mesh_preview.PNG)
 
@@ -259,19 +259,35 @@ The mesh used by the finite-difference time-domain (FDTD) method is a strictly r
 
 ### Mesh Validation
 
-The mesh resulting from the problem setup and chosen mesh regions / types can be inspected upon execution as AppCSXCAD starts in read-only mode when running the script in Octave. One can add 
+When constructing the current example, some less ideal choices were (in part deliberately) made and their repercussions observed, problems identified and resolved:
+
+* PML boundary conditions were set up too close to the simulated geometry (they appear to eat into the volume, using existing grid units). The volume was increased by 5 mm (at 1 mm grid spacing, adding at least 5 cells on each side around the simulation volume).
+* PML grid line count of 1 in any direction was not appropriate. The value was increased to 4. Multiple cell thickness is preferred (e.g. 8). 
+* Overlapping grid regions were set up. 
+	- Grids are listed on the right hand side of the FreeCAD OpenEMS Export dialog in descending priority. This in itself is not wrong, but can cause grid lines in z to be doubled-up, resulting in ~0 mm spacing, which has to be handled with additional scripting (detailed below).
+	- Coordinate lists are concatenated, and overlapping lines are only recognizeable after sorting.
+
+The mesh resulting from the problem setup and chosen mesh regions / types can be inspected upon execution as AppCSXCAD starts in read-only mode when running the script in Octave. Overlapping grid line however are not highlighted. 
+
+As a typical presentation of a problem, OpenEMS may report an invalid energy value, and run for a very long time without progress.  
+
+**Next, let's look at automatically detecting meshing errors.**
+
+####  OpenEMS Problem "Energy: ~   nan (- 0.00dB)"
+
+When using multiple overlapping grids that have the same priority level, the lists of grid positions ``mesh.x , mesh.y , mesh.z`` are not sorted, and lists of positions are currently simply concatenated. Thus, when comparing unsorted consecutive values (hint from http://openems.de/forum/viewtopic.php?t=1103), large negative jumps like "-65 mm" could be found (in FreeCAD-to-OpenEMS there only seems to be the ``top priority, remove overlapping lines`` option which currently does not prevent the problem). 
+
+As a first step to look at all the numerical values of grid line positions in the exported script, one can add manually:
 
 ```Matlab
 mesh.x
 mesh.y
 mesh.z
 ```
-lines to look at all the numerical values of grid ine positions. Some issues however also become evident rather quickly as the simulation may not run, or yield plausible results:
 
-####  OpenEMS Problem "Energy: ~   nan (- 0.00dB)"
-As per http://openems.de/forum/viewtopic.php?t=1103 , one should check the minimum spacing between mesh grid lines. When using multiple overlapping grids that have the same priority level, one would also need to sort them first or otherwise the minimum could be "-65 mm" (in FreeCAD-to-OpenEMS there only seems to be the ``top priority, remove overlapping lines`` option which currently does not prevent the problem).
+The [OpenEMS mesh](http://openems.de/index.php/FDTD_Mesh) documentation does not mention whether the lists have to be monotonic. Applying sort() before ``DefineRectGrid()`` does not impact generality but is necessary to identify steps that are too small.
 
-As a presumed improvement, one could consider looking for the minimum abs(), inserted before DefineRectGrid():
+Without sorting, the simple validation code and output would look like this:
 
 ```Matlab
 disp("mesh min spacing x : "), min(abs(diff(mesh.x)))
@@ -279,7 +295,8 @@ disp("mesh min spacing y : "), min(abs(diff(mesh.y)))
 disp("mesh min spacing z : "), min(abs(diff(mesh.z)))
 ```
 
-This appears to be unreliable however. The output in a currently problematic case only reflects the intended spacings:
+``abs()`` removes large negative differences, but will overlook overlapping coordinates. The output in a problematic case only reflects the intended spacings (note the minimum spacing ~0.0 in z is not being found):
+
 ```
 mesh min spacing x :
 ans = 1.0000
@@ -289,7 +306,9 @@ mesh min spacing z :
 ans = 0.2500
 ```
 
-Since an order is not guaranteed, the mesh entries need to be sorted first. The following lines can be inserted manually into the script after generation, replacing the 
+** Solution **
+
+To detect (near-)duplicate entries, the mesh lists need to be sorted first. The following lines can be inserted manually into the script after generation, replacing the 
 
 ```Matlab
 CSX = DefineRectGrid(...);
@@ -329,10 +348,10 @@ Minimum mesh spacing violated, removing duplicate entries.
 ...
  ```
  
- If that does not resolve the issue, the boundary conditions or ports are next to be investigated. In the current case, PML boundary conditions were set up too close to the simulated geometry (they appear to eat into the volume, using existing grid units). Additionally, PML count of 1 is not appropriate, 4 works. Multiple cell thickness is preferred (e.g. 8). 
+ If that does not resolve the issue, the boundary conditions or ports are next to be investigated. 
  
  
-# Solution and Visualization 
+# Computation and Visualization 
 
 * Now is a good time to click ``Save Current Settings``, which produces an .ini file in the project folder.
 * Note under ``Postprocessing`` there is a ``Write ABORT simulation File`` button, which creates a file named "ABORT" in the ``tmp/`` subdirectory of the project folder to cause OpenEMS to exit when it is being run from Octave, which will come in handy later.
