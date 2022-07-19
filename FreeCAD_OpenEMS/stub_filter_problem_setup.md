@@ -259,7 +259,7 @@ The mesh used by the finite-difference time-domain (FDTD) method is a strictly r
 
 ### Mesh Validation
 
-When constructing the current example, some less ideal choices were (in part deliberately) made and their repercussions observed, problems identified and resolved:
+When constructing the current example, some less ideal choices were (in part deliberately) made and their repercussions observed. In the course of resolving the issues below,  OpenEMS happened to report "Energy: ~   nan (- 0.00dB)", which was caused by one of the problems identified and resolved:
 
 * PML boundary conditions were set up too close to the simulated geometry (they appear to eat into the volume, using existing grid units). The volume was increased by 5 mm (at 1 mm grid spacing, adding at least 5 cells on each side around the simulation volume).
 * PML grid line count of 1 in any direction was not appropriate. The value was increased to 4. Multiple cell thickness is preferred (e.g. 8). 
@@ -271,9 +271,7 @@ The mesh resulting from the problem setup and chosen mesh regions / types can be
 
 As a typical presentation of a problem, OpenEMS may report an invalid energy value, and run for a very long time without progress.  
 
-**Next, let's look at automatically detecting meshing errors.**
-
-####  OpenEMS Problem "Energy: ~   nan (- 0.00dB)"
+#### Automatically Detecting Meshing Errors
 
 When using multiple overlapping grids that have the same priority level, the lists of grid positions ``mesh.x , mesh.y , mesh.z`` are not sorted, and lists of positions are currently simply concatenated. Thus, when comparing unsorted consecutive values (hint from http://openems.de/forum/viewtopic.php?t=1103), large negative jumps like "-65 mm" could be found (in FreeCAD-to-OpenEMS there only seems to be the ``top priority, remove overlapping lines`` option which currently does not prevent the problem). 
 
