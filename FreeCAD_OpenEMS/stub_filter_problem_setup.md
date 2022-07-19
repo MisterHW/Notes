@@ -267,7 +267,7 @@ When constructing the current example, some less ideal choices were (in part del
 	- Grids are listed on the right hand side of the FreeCAD OpenEMS Export dialog in descending priority. This in itself is not wrong, but can cause grid lines in z to be doubled-up, resulting in ~0 mm spacing, which has to be handled with additional scripting (detailed below).
 	- Coordinate lists are concatenated, and overlapping lines are only recognizeable after sorting.
 
-The mesh resulting from the problem setup and chosen mesh regions / types can be inspected upon execution as AppCSXCAD starts in read-only mode when running the script in Octave. Overlapping grid line however are not highlighted. 
+The mesh resulting from the problem setup and chosen mesh regions / types can be inspected upon execution as AppCSXCAD starts in read-only mode when running the script in Octave. Overlapping grid lines however are not highlighted. 
 
 As a typical presentation of a problem, OpenEMS may report an invalid energy value, and run for a very long time without progress.  
 
@@ -306,7 +306,7 @@ mesh min spacing z :
 ans = 0.2500
 ```
 
-** Solution **
+**Solution**
 
 To detect (near-)duplicate entries, the mesh lists need to be sorted first. The following lines can be inserted manually into the script after generation, replacing the 
 
