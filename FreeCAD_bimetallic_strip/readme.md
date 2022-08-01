@@ -11,12 +11,12 @@ For the sake of clarity,
 
 ## Approaches that don't work
 
-At of the time of writing, FreeCAD 0.20 does not support meshing across multiple objects, and does not support the use of multiple meshes in one simulation. The use of multiple meshes or mesh subdomains would also lack other motivation (like parallel processing, see [Domain Decomposition](https://doc.freefem.org/documentation/ffddm/introduction-to-the-domain-decomposition-method.html)). 
+At the time of writing, FreeCAD 0.20 does not support meshing across multiple objects, and does not support the use of multiple meshes in one simulation. The use of multiple meshes or mesh subdomains would also lack other motivation (like parallel processing, see [Domain Decomposition](https://doc.freefem.org/documentation/ffddm/introduction-to-the-domain-decomposition-method.html)). 
 
 Older tutorials that are now outdated due to changes in the UI and steps:
 
-* [0.17 - FreeCAD FEM Tutorial thermomechanische Analyse eines Bimetallstreifens](https://www.youtube.com/watch?v=Qbif13e2iyo)
-* [0.18 -FreeCAD FEM Tutorial - Unterschiedliche Materialien in einer linear mechanischen Analyse](https://www.youtube.com/watch?v=T-ggqH3tXHs)
+* [0.17 - FreeCAD FEM Tutorial - thermomechanische Analyse eines Bimetallstreifens](https://www.youtube.com/watch?v=Qbif13e2iyo)
+* [0.18 - FreeCAD FEM Tutorial - Unterschiedliche Materialien in einer linear mechanischen Analyse](https://www.youtube.com/watch?v=T-ggqH3tXHs)
 
 ## An approach that works
 
@@ -48,4 +48,6 @@ The complete Analysis configuration contains selected materials with their corre
 
 ![](img/problem_setup.PNG)
 
+### further reading
 
+* "Composite Block" - nested cubes with different materials: https://wiki.freecadweb.org/FEM_Shear_of_a_Composite_Block
