@@ -12,7 +12,7 @@ A system is needed which can evaluate all detector channels in parallel and prod
 
 The hardware used was an experimental ANN made by Intel, which probably only really saw the light of day in high energy physics laboratories - the Intell 80170NX ETANN.
 
-## Intel 80170NX - Electrically Trainable Artificial Neural Network (ETANN)
+## Intel 80170NX - Electrically Trainable Analog Neural Network (ETANN)
 
 The amount of documentation and reports of practical applications of the 80170NX is limited. Being an early and obscure device, no datasheet could be found.
 
