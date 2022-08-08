@@ -24,7 +24,7 @@ Here's is a drawing of the synapse implementation and its conceptual representat
 
 ![](img/80170NX_synapse.png)
 
-The key challenge brought about by analog storage of weights with multiple levels is stability of the charge and operating conditions of floating gate MOS transistors. Since this isn't storage of a binary value but rather of a continuous value that needs to stay stable within 1/64 to 1/256 of its range, even 7-8 bit equivalent precision seems ambitious. The fact that this was attempted and had some success at the time is rather remarkable.
+The key challenge brought about by analog storage of weights with multiple levels is stability of the charge and operating conditions of floating gate MOS transistors. Since this isn't storage of a binary value but rather of a continuous value that needs to stay stable within 1/64 to 1/128 of its range, even 7-8 bit equivalent precision seems ambitious. The fact that this was attempted and had some success at the time is rather remarkable.
 
 As a side note, this was the time where Polaroid patented the use of EPROM memory as a digital image sensor (United States Patent US4803554).
 
@@ -46,7 +46,7 @@ The ultimate undoing of the ETANN chip and a candidate improvement upon it is de
 
 ![](img/PCI-neuro-board_W640.jpg)
 
-	SAND is manufactured in a 0.8pm CMOS process, using a sea-of-gates technology with almost 50K Gates. 
+	SAND is manufactured in a 0.8 µm CMOS process, using a sea-of-gates technology with almost 50K Gates. 
 	The packaging of SAND is a PGA with 120 signal-pins. The non-linear activation function is calculated by the
 	use of a free programmable look-up table allowing for a maximum of flexibility. A controller chip, the memories, 
 	the lookup table and the SAND chip are arranged as a fixed modular unit guaranteeing the tight timing for 
