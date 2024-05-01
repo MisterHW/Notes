@@ -4,7 +4,7 @@
 
 ![](data/channel_iso.jpg)
 
-## Matrial
+## Material
 
 ![](data/channel_drawing.JPG)
  [conduit profile source](https://www.dold-mechatronik.de/Kabelkanal-aus-Aluminium-80x80-Zuschnitt) 
