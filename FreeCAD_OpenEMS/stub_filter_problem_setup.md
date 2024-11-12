@@ -230,6 +230,8 @@ Graded meshes allow minimizing the number of grid lines / cells while still capt
 
 ([source](https://www.researchgate.net/publication/3019213_A_Three-Dimensional_FDTD_Subgridding_Algorithm_With_Separated_Temporal_and_Spatial_Interfaces_and_Related_Stability_Analysis). For more on the subject also see https://doi.org/10.1109/TAP.2023.3284488)
 
+So for now, we can define nested regions but they are merged into a single rectilinear grid (no subgridding supported in OpenEMS for the time being!). 
+
 As shown above, two nested mesh regions are defined in this example:
 
 * ``grid_coarse``: 1 x 1 x 1 mm cell size
