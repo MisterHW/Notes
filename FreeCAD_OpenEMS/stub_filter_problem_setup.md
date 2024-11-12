@@ -218,11 +218,17 @@ Arguably the most inconvenient aspect of OpenEMS and is its lack of automated me
 
 ![](img/OpenEMS_mesh_snippet.PNG)
 
-In the future, automatic mesh generation and unstructured grids may be added, which will probably go hand-in-hand with automated mesh generation:
+In the future, automatic mesh generation may be added, but for the time being there will be no analog to an unstructured grid:
 
 ![](img/structured_vs_unstructured_grid_engr459a7.PNG)
 
 <!--source:  https://www.youtube.com/watch?v=AJ8w2InCojA -->
+
+Graded meshes allow minimizing the number of grid lines / cells while still capturing the spatial details of the model sufficiently to allow acceptable simulation times. Subgridding on the other hand allows to embed higher-resolution simulation domains without enforcing unnecessary, small cells or a substantially higher resolution far from the structure where the fields to not require a high spatial resolution.
+
+![image](https://github.com/user-attachments/assets/daa54e55-cb50-4f6e-a37a-18632bf1223b)
+
+([source](https://www.researchgate.net/publication/3019213_A_Three-Dimensional_FDTD_Subgridding_Algorithm_With_Separated_Temporal_and_Spatial_Interfaces_and_Related_Stability_Analysis). For more on the subject also see https://doi.org/10.1109/TAP.2023.3284488)
 
 As shown above, two nested mesh regions are defined in this example:
 
